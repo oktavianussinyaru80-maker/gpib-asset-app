@@ -5,9 +5,9 @@ const { createClient } = require('@supabase/supabase-js');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// KONEKSI SUPABASE ONLINE (MENGGUNAKAN PUBLISHABLE KEY YANG SUDAH TERBUKTI AMAN)
+// KONEKSI SUPABASE ONLINE YANG BENAR
 const SUPABASE_URL = 'https://supabase.co';
-const SUPABASE_KEY = 'sb_publishable_dJVJ9iiDsSr6nTqMWua0FA_Dj21KC6o';
+const SUPABASE_KEY = 'sb_secret_kvjikjyNTDUXUfpfo0d9fA_sG-oOyjo';
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 app.use(express.json());
@@ -32,12 +32,11 @@ app.get('/api/assets', async (req, res) => {
     }
 });
 
-// API: Simpan data ke Supabase (Kode BSA Menyesuaikan Pilihan Lokasi & Tempat)
+// API: Simpan data ke Supabase (Kode BSA Otomatis Menyesuaikan Pilihan Lokasi & Tempat)
 app.post('/api/assets', async (req, res) => {
     try {
         const { kategori, lokasi, tempat, tahun, nama, kondisi } = req.body;
 
-        // Hitung jumlah aset dengan kategori yang sama untuk nomor urut
         const { data: existingAssets, error: countError } = await supabase
             .from('assets')
             .select('id')
@@ -48,7 +47,6 @@ app.post('/api/assets', async (req, res) => {
         const count = (existingAssets ? existingAssets.length : 0) + 1;
         const nomorUrut = String(count).padStart(3, '0');
         
-        // KODE BSA OTOMATIS MENYESUAIKAN LOKASI DAN TEMPAT YANG DIPILIH
         const kodeBSA = `BSA-${kategori}-${lokasi}-${tempat}-${tahun}-${nomorUrut}`;
         
         const { data: insertedData, error: insertError } = await supabase
@@ -64,7 +62,7 @@ app.post('/api/assets', async (req, res) => {
     }
 });
 
-// API: Menghapus baris data aset berdasarkan ID
+// API: Menghapus baris data aset berdasarkan ID dengan PIN 1234
 app.delete('/api/assets/:id', async (req, res) => {
     try {
         const { id } = req.params;
