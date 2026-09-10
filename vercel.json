@@ -1,11 +1,5 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
-    }
-  ],
   "routes": [
     {
       "src": "/api/(.*)",
@@ -14,10 +8,6 @@
     {
       "src": "/js/(.*)",
       "dest": "/public/js/$1"
-    },
-    {
-      "src": "/logo-gpib.png",
-      "dest": "/public/logo-gpib.png"
     },
     {
       "src": "/(.*)",
