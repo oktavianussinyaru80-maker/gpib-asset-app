@@ -6,15 +6,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // KONEKSI SUPABASE ONLINE (MENGGUNAKAN SECRET SERVICE ROLE KEY)
-const SUPABASE_URL = 'https://xsutkuazoprovxbrjgcw.supabase.co';
-const SUPABASE_KEY = 'sb_secret_qEqJ1hTiCxfjvfL7HdCLZQ_44PTMXyS';
+const SUPABASE_URL = 'https://supabase.co';
+const SUPABASE_KEY = 'sb_secret_qEqJlHticXfjvfL7HdCLZQ_44PTMXyS...[MASUKKAN_KUNCI_SECRET_ASLI_ANDA]';
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 app.use(express.json());
-// Memastikan jalur desain dibaca dengan kuat di server cloud
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Mengarahkan halaman utama langsung ke file dashboard.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'dashboard.html'));
 });
@@ -24,8 +22,7 @@ app.get('/api/assets', async (req, res) => {
     try {
         const { data, error } = await supabase
             .from('assets')
-            .select('*')
-            .order('id', { ascending: false });
+            .select('*');
 
         if (error) return res.status(400).json({ error: error.message });
         res.json(data || []);
@@ -34,29 +31,40 @@ app.get('/api/assets', async (req, res) => {
     }
 });
 
-// API: Simpan data ke Supabase (Mendukung kolm foto baru)
+// API: Simpan data ke Supabase (Penyelamatan Fleksibel Nama Kolom)
 app.post('/api/assets', async (req, res) => {
     try {
         const { kategori, lokasi, tempat, tahun, nama, kondisi, foto } = req.body;
 
-        const { data: existingAssets, error: countError } = await supabase
-            .from('assets')
-            .select('id')
-            .eq('kategori', kategori);
-
-        if (countError) return res.status(400).json({ error: countError.message });
-
+        // Ambil data untuk menghitung nomor urut otomatis
+        const { data: existingAssets } = await supabase.from('assets').select('id');
         const count = (existingAssets ? existingAssets.length : 0) + 1;
         const nomorUrut = String(count).padStart(3, '0');
         
-        const kodeBSA = `BSA-${kategori}-${lokasi}-${tempat}-${tahun}-${nomorUrut}`;
+        const kodeGenerated = `BSA-${kategori}-${lokasi}-${tempat}-${tahun}-${nomorUrut}`;
         
+        // Membuat paket data dinamis agar COCOK dengan kodeBSA maupun kode_bsa di Supabase
+        const rowData = {
+            nama: nama,
+            kategori: kategori,
+            lokasi: lokasi,
+            tempat: tempat,
+            tahun: tahun,
+            kondisi: kondisi,
+            foto: foto,
+            kodeBSA: kodeGenerated,  // Jika kolom di Supabase bernama kodeBSA
+            kode_bsa: kodeGenerated // Jika kolom di Supabase bernama kode_bsa
+        };
+
         const { data: insertedData, error: insertError } = await supabase
             .from('assets')
-            .insert([{ kodeBSA, nama, kategori, lokasi, tempat, tahun, kondisi, foto }])
+            .insert([rowData])
             .select();
 
-        if (insertError) return res.status(400).json({ error: insertError.message });
+        if (insertError) {
+            console.log("⚠️ ERROR SUPABASE:", insertError.message);
+            return res.status(400).json({ error: insertError.message });
+        }
         
         res.status(201).json({ success: true, data: insertedData });
     } catch (err) {
@@ -81,5 +89,4 @@ app.delete('/api/assets/:id', async (req, res) => {
     }
 });
 
-// BARIS INI YANG PALING PENTING AGAR VERCEL BISA MEMBACA DESAIN WEB ANDA
 module.exports = app;
