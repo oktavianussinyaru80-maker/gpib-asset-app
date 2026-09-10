@@ -6,11 +6,14 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // KONEKSI SUPABASE ONLINE (MENGGUNAKAN SECRET SERVICE ROLE KEY)
-const SUPABASE_URL = 'https://xsutkuazoprovxbrjgcw.supabase.co';
+const SUPABASE_URL = 'https://supabase.co';
 const SUPABASE_KEY = 'sb_secret_Fx6bxyDUmpROiqkH1G38Ag_K5XlgreQ';
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-app.use(express.json());
+// KUNCI PERBAIKAN: Mengatur batas penerimaan data teks foto kamera HP hingga 50MB
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
@@ -36,14 +39,12 @@ app.post('/api/assets', async (req, res) => {
     try {
         const { kategori, lokasi, tempat, tahun, nama, kondisi, foto } = req.body;
 
-        // Ambil data untuk menghitung nomor urut otomatis
         const { data: existingAssets } = await supabase.from('assets').select('id');
         const count = (existingAssets ? existingAssets.length : 0) + 1;
         const nomorUrut = String(count).padStart(3, '0');
         
         const kodeGenerated = `BSA-${kategori}-${lokasi}-${tempat}-${tahun}-${nomorUrut}`;
         
-        // Membuat paket data dinamis agar COCOK dengan kodeBSA maupun kode_bsa di Supabase
         const rowData = {
             nama: nama,
             kategori: kategori,
@@ -52,8 +53,8 @@ app.post('/api/assets', async (req, res) => {
             tahun: tahun,
             kondisi: kondisi,
             foto: foto,
-            kodeBSA: kodeGenerated,  // Jika kolom di Supabase bernama kodeBSA
-            kode_bsa: kodeGenerated // Jika kolom di Supabase bernama kode_bsa
+            kodeBSA: kodeGenerated,  
+            kode_bsa: kodeGenerated 
         };
 
         const { data: insertedData, error: insertError } = await supabase
