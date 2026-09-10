@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dasbor Aset - GPIB Betlehem Sungai Ambawang</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cloudflare.com"></script>
+    <script src="https://tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cloudflare.com">
 </head>
 <body class="bg-gray-50 font-sans min-h-screen text-gray-800">
 
@@ -55,11 +54,6 @@
                 <div>
                     <label class="block font-bold text-gray-600 mb-1">Nama Barang / Aset</label>
                     <input type="text" id="nama_barang" required placeholder="Contoh: Mic Wireless Ashley" class="w-full p-3 border rounded-xl bg-gray-50/50 focus:outline-none focus:ring-2 focus:ring-blue-900">
-                </div>
-                <!-- Kolom Ambil Foto Barang -->
-                <div>
-                    <label class="block font-bold text-gray-600 mb-1">Foto Fisik Barang (Kamera/Galeri HP)</label>
-                    <input type="file" id="foto_barang" accept="image/*" class="w-full p-2 border rounded-xl bg-gray-50/50 text-xs file:mr-4 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -123,24 +117,6 @@
         </div>
     </main>
 
-    <!-- AREA POP-UP LABEL STIKER (PENAMBALAN UTUH) -->
-    <div id="print-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white p-6 rounded-2xl max-w-sm w-full text-center space-y-4 shadow-2xl relative">
-            <h4 class="font-bold text-gray-800 text-sm border-b pb-2">Label Stiker Fisik Resmi</h4>
-            <div id="label-sticker-area" class="border-2 border-dashed border-gray-400 p-4 rounded-xl bg-white mx-auto inline-block text-left w-full shadow-inner">
-                <div class="flex justify-between items-center border-b pb-1.5 mb-2">
-                    <div class="font-black text-[11px] text-blue-900 tracking-wider">PROPERTY OF GPIB</div>
-                    <div class="text-[9px] font-mono text-gray-500 font-bold">BETLEHEM BSA</div>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <div id="qrcode-box" class="bg-white p-1 border rounded-lg shrink-0 shadow-sm flex items-center justify-center"></div>
-                    <div class="text-[10px] leading-tight space-y-0.5">
-                        <p class="text-gray-400 font-bold uppercase text-[8px] tracking-tight">Kode Aset Resmi:</p>
-                        <p class="font-mono font-black text-blue-700 text-xs tracking-tight" id="modal-kode-bsa">-</p>
-                        <p class="font-black text-gray-800 text-[11px] truncate mt-1" id="modal-nama-barang">-</p>
-                        <p class="text-gray-400 text-[8px]" id="modal-detail-aset">-</p>
-                    </div>
-                </div>
-            </div>
-            <div class="flex space-x-2 text-xs font-bold pt-2">
-                <button onclick="closePrintModal()" class="w-1/2 border py-2.5 rounded-xl text-gray-500">Tutup</button>
+    <script src="/js/main.js"></script>
+</body>
+</html>
