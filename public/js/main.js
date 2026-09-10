@@ -1,20 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Jalankan fungsi muat data pertama kali halaman dibuka
     loadAssets();
 
-    // 1. Fitur Kirim Data Entri Aset dari HP ke Server Laptop
     const form = document.getElementById('asset-form');
     if (form) {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            const fileInput = document.getElementById('foto_barang');
+            let fotoBase64 = "";
+
+            // Mengonversi gambar dari kamera HP menjadi teks aman
+            if (fileInput && fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                fotoBase64 = await convertFileToBase64(file);
+            }
+
             const payload = {
                 nama: document.getElementById('nama_barang').value,
                 kategori: document.getElementById('kategori').value,
                 lokasi: document.getElementById('lokasi').value,
                 tempat: document.getElementById('tempat').value,
                 tahun: parseInt(document.getElementById('tahun').value) || 2026,
-                kondisi: document.getElementById('kondisi').value
+                kondisi: document.getElementById('kondisi').value,
+                foto: fotoBase64 // Menyisipkan data gambar
             };
 
             try {
@@ -23,73 +31,144 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-
                 const result = await response.json();
 
                 if (response.ok) {
-                    alert('🎉 Data Aset Berhasil Disimpan ke Supabase Online!');
+                    alert('🎉 Data Aset & Foto Berhasil Disimpan Online!');
                     form.reset();
                     if(document.getElementById('tahun')) document.getElementById('tahun').value = "2026";
-                    loadAssets(); // Muat ulang daftar register di layar bawah
+                    loadAssets();
                 } else {
-                    alert('⚠️ Gagal Menyimpan: ' + (result.error || 'Terjadi kesalahan sistem.'));
+                    alert('⚠️ Gagal Menyimpan: ' + (result.error || 'Terjadi kesalahan.'));
                 }
             } catch (err) {
-                alert('❌ Server Laptop Tidak Merespon. Pastikan server node tetap menyala.');
-                console.error(err);
+                alert('❌ Gagal terhubung ke server cloud.');
             }
         });
     }
 });
 
-// 2. Fungsi Utama Mengambil Data dari Server dan Memajangnya di HP
+// Fungsi pengubah file gambar menjadi kode string teks
+function convertFileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+}
+
+// LOAD DATA & TAMPILKAN FOTO BARANG DI LAYAR HP
 async function loadAssets() {
     const container = document.getElementById('asset-list');
     if (!container) return;
 
     try {
         const response = await fetch('/api/assets');
-        if (!response.ok) throw new Error('Gagal mengambil data dari server.');
-        
         const assets = await response.json();
         container.innerHTML = '';
-
         let baik = 0, perbaikan = 0, rusak = 0;
 
-        // Jika database di internet masih kosong
         if (!assets || assets.length === 0) {
             container.innerHTML = '<p class="text-xs text-gray-400 text-center py-6">Database Online Kosong. Silakan masukkan aset perdana Anda di atas!</p>';
             return;
         }
 
-        // Tampilkan data baris demi baris ke HP jika ada data
         assets.forEach(asset => {
             if (asset.kondisi === 'Baik') baik++;
             if (asset.kondisi === 'Perlu Perbaikan') perbaikan++;
             if (asset.kondisi === 'Rusak Berat') rusak++;
 
             const card = document.createElement('div');
-            card.className = "p-3 bg-gray-50 rounded-xl border border-gray-200 flex justify-between items-center text-xs shadow-sm mb-2";
+            card.className = "p-3 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between text-xs shadow-sm mb-2 animate-fade-in";
+            
+            // Cek apakah aset memiliki foto, jika tidak beri gambar ikon default
+            const imageTag = asset.foto 
+                ? `<img src="${asset.foto}" class="w-14 h-14 object-cover rounded-lg border bg-white shrink-0 shadow-sm cursor-pointer" onclick="viewLargeImage('${asset.foto}', '${asset.nama}')" title="Klik untuk perbesar">`
+                : `<div class="w-14 h-14 bg-gray-200 border rounded-lg flex items-center justify-center text-gray-400 shrink-0"><i class="fa-solid fa-image text-lg"></i></div>`;
+
             card.innerHTML = `
-                <div>
-                    <p class="font-mono text-blue-700 font-bold">${asset.kodeBSA || 'BSA-UNKNOWN'}</p>
-                    <p class="font-semibold text-gray-800 text-sm mt-0.5">${asset.nama || '-'}</p>
-                    <p class="text-gray-400 text-[10px] mt-0.5">${asset.lokasi || ''} • ${asset.tempat || ''} • Thn ${asset.tahun || ''}</p>
+                <div class="flex items-start space-x-3">
+                    ${imageTag}
+                    <div class="flex-1 min-w-0">
+                        <p class="font-mono text-blue-700 font-black text-[12px]">${asset.kodeBSA}</p>
+                        <p class="font-black text-gray-800 text-sm truncate mt-0.5">${asset.nama}</p>
+                        <p class="text-gray-400 text-[10px] mt-0.5 font-bold uppercase tracking-tight">${asset.lokasi} • ${asset.tempat} • Thn ${asset.tahun} • [${asset.kondisi}]</p>
+                    </div>
                 </div>
-                <span class="px-2 py-1 rounded-md font-bold text-[10px] ${
-                    asset.kondisi === 'Baik' ? 'bg-green-100 text-green-700' : 
-                    asset.kondisi === 'Perlu Perbaikan' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'
-                }">${asset.kondisi || 'Baik'}</span>
+                <div class="flex items-center space-x-2 border-t pt-2 mt-2 justify-end">
+                    <button onclick="openPrintModal('${asset.kodeBSA}', '${asset.nama}', '${asset.lokasi}', '${asset.tempat}', '${asset.tahun}')" class="bg-blue-900 text-white px-2.5 py-1.5 rounded-lg font-bold flex items-center space-x-1 text-[11px]">
+                        <i class="fa-solid fa-qrcode text-xs"></i> <span>Label</span>
+                    </button>
+                    <button onclick="deleteAssetSecurely(${asset.id}, '${asset.nama}')" class="bg-red-50 text-red-600 border border-red-200 p-1.5 rounded-lg">
+                        <i class="fa-solid fa-trash-can text-xs"></i>
+                    </button>
+                </div>
             `;
             container.appendChild(card);
         });
 
-        // Update papan angka di atas
         if(document.getElementById('count-baik')) document.getElementById('count-baik').innerText = baik;
         if(document.getElementById('count-perbaikan')) document.getElementById('count-perbaikan').innerText = perbaikan;
         if(document.getElementById('count-rusak')) document.getElementById('count-rusak').innerText = rusak;
 
     } catch (err) {
-        container.innerHTML = '<p class="text-xs text-red-400 text-center py-6">❌ Gagal terhubung ke Server Laptop Anda.</p>';
+        container.innerHTML = '<p class="text-xs text-red-400 text-center py-6">❌ Gagal memuat data.</p>';
     }
+}
+
+// Fungsi Klik Gambar untuk Melihat Ukuran Besar (Pop-up cepat)
+window.viewLargeImage = function(base64Data, nama) {
+    const w = window.open();
+    w.document.write(`<title>Foto Aset: ${nama}</title><body style="margin:0; background:#000; display:flex; justify-content:center; align-items:center; height:100vh;"><img src="${base64Data}" style="max-width:100%; max-height:100%; border-radius:8px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);"></body>`);
+}
+
+async function deleteAssetSecurely(id, namaBarang) {
+    const pin = prompt(`⚠️ Masukkan PIN Keamanan Pengurus Gereja untuk menghapus "${namaBarang}":`);
+    if (pin === null) return;
+    if (pin !== '1234') {
+        alert('❌ PIN Salah!');
+        return;
+    }
+    const setuju = confirm(`Hapus permanen "${namaBarang}"?`);
+    if (!setuju) return;
+
+    try {
+        const response = await fetch(`/api/assets/${id}`, { method: 'DELETE' });
+        if (response.ok) {
+            alert('🗑️ Data terhapus.');
+            loadAssets();
+        }
+    } catch (err) {
+        alert('❌ Gagal merespon.');
+    }
+}
+
+let qrInstance = null;
+function openPrintModal(kodeBSA, nama, lokasi, tempat, tahun) {
+    document.getElementById('modal-kode-bsa').innerText = kodeBSA;
+    document.getElementById('modal-nama-barang').innerText = nama;
+    document.getElementById('modal-detail-aset').innerText = `${lokasi} / ${tempat} / TAHUN ${tahun}`;
+    const qrBox = document.getElementById('qrcode-box');
+    qrBox.innerHTML = '';
+    qrInstance = new QRCode(qrBox, {
+        text: kodeBSA,
+        width: 60,
+        height: 60,
+        colorDark: "#1e3a8a",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+    document.getElementById('print-modal').classList.remove('hidden');
+}
+
+function closePrintModal() {
+    document.getElementById('print-modal').classList.add('hidden');
+}
+
+function executePrintLabel() {
+    const printContents = document.getElementById('label-sticker-area').innerHTML;
+    document.body.innerHTML = `<div style="padding:20px; display:flex; justify-content:center; align-items:center; height:100vh;"><div style="border:2px solid #000; padding:15px; width:280px; border-radius:10px; font-family:monospace;">${printContents}</div></div>`;
+    window.print();
+    window.location.reload();
 }
