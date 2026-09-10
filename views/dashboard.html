@@ -8,7 +8,7 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- FontAwesome Icons CDN -->
+  <!-- FontAwesome CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-50 font-sans min-h-screen text-gray-800">
@@ -28,10 +28,10 @@
     </div>
   </nav>
 
-  <!-- Main Container -->
+  <!-- Main Content Container -->
   <main class="container mx-auto p-4 md:p-6 max-w-5xl space-y-6">
 
-    <!-- Header Banner / Title Section -->
+    <!-- Header Banner -->
     <header class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
         <h2 class="text-xl md:text-2xl font-extrabold text-blue-950">
@@ -48,7 +48,7 @@
       </div>
     </header>
 
-    <!-- Quick Stats Cards -->
+    <!-- Ringkasan Statistik Aset -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
         <div class="p-3 bg-blue-50 text-blue-600 rounded-lg">
@@ -56,7 +56,7 @@
         </div>
         <div>
           <p class="text-xs text-gray-500 uppercase font-semibold">Total Inventaris</p>
-          <p class="text-2xl font-bold text-gray-800 mt-0.5">--</p>
+          <p class="text-2xl font-bold text-gray-800 mt-0.5">0</p>
         </div>
       </div>
 
@@ -66,7 +66,7 @@
         </div>
         <div>
           <p class="text-xs text-gray-500 uppercase font-semibold">Kondisi Baik</p>
-          <p class="text-2xl font-bold text-gray-800 mt-0.5">--</p>
+          <p class="text-2xl font-bold text-gray-800 mt-0.5">0</p>
         </div>
       </div>
 
@@ -76,12 +76,12 @@
         </div>
         <div>
           <p class="text-xs text-gray-500 uppercase font-semibold">Perlu Perbaikan</p>
-          <p class="text-2xl font-bold text-gray-800 mt-0.5">--</p>
+          <p class="text-2xl font-bold text-gray-800 mt-0.5">0</p>
         </div>
       </div>
     </div>
 
-    <!-- Form Entri Inventaris Card -->
+    <!-- Form Entri Inventaris -->
     <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
       <div class="flex items-center space-x-2 border-b border-gray-100 pb-4 mb-6">
         <i class="fa-solid fa-pen-to-square text-blue-900"></i>
@@ -105,8 +105,8 @@
             <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-sm text-gray-700">
               <option value="">-- Pilih Ruangan --</option>
               <option value="S-BSA">S-BSA (Sungai Ambawang)</option>
-              <option value="P-Serv">P-Serv (Pastori/Servant)</option>
-              <option value="B-BSA">B-BSA (Bait/Gedung)</option>
+              <option value="P-Serv">P-Serv (Pastori / Servant)</option>
+              <option value="B-BSA">B-BSA (Bait / Gedung)</option>
             </select>
           </div>
 
