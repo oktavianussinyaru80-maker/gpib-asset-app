@@ -13,15 +13,15 @@
     },
     {
       "src": "/js/(.*)",
-      "dest": "/js/$1"
+      "dest": "/public/js/$1"
     },
     {
       "src": "/logo-gpib.png",
-      "dest": "/logo-gpib.png"
+      "dest": "/public/logo-gpib.png"
     },
     {
       "src": "/(.*)",
-      "dest": "server.js"
+      "dest": "dashboard.html"
     }
   ]
 }
