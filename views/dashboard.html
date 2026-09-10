@@ -4,88 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dasbor Aset - GPIB Betlehem Sungai Ambawang</title>
-    <!-- Jalur Desain & Ikon Online (Pastikan Laptop Terkoneksi Internet) -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cloudflare.com">
-    <!-- Pengaturan Aplikasi HP (PWA) -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script src="https://cloudflare.com"></script>
 </head>
 <body class="bg-gray-50 font-sans">
 
-    <!-- Navigasi Atas Atraktif -->
     <nav class="bg-blue-900 text-white p-4 sticky top-0 z-50 shadow-md">
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <i class="fa-solid fa-church text-xl md:text-2xl text-amber-400 px-1"></i>
+                <i class="fa-solid fa-church text-xl text-amber-400"></i>
                 <h1 class="text-sm md:text-lg font-bold tracking-wide">Aset GPIB Betlehem BSA</h1>
             </div>
-            <span class="text-[10px] md:text-xs bg-blue-800 px-2.5 py-1 rounded-full font-mono text-blue-200">v1.0</span>
+            <span class="text-[10px] bg-blue-800 px-2 rounded-full font-mono text-blue-200">v1.2</span>
         </div>
     </nav>
 
-    <!-- Konten Utama Aplikasi (Sangat Responsif di HP) -->
     <main class="container mx-auto p-4 space-y-6 max-w-4xl">
         
-        <!-- Komponen Gambar Banner Dasbor yang Bisa Diganti -->
+        <!-- Banner Dasbor -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div id="dashboard-banner" class="w-full h-440 md:h-600 bg-gradient-to-r from-blue-700 to-indigo-900 bg-cover bg-center flex items-end p-6 relative">
+            <div id="dashboard-banner" class="w-full h-44 bg-gradient-to-r from-blue-700 to-indigo-900 bg-cover bg-center flex items-end p-6 relative">
                 <div class="absolute inset-0 bg-black bg-opacity-40"></div>
-              <!-- Susunan Logo di Sebelah Kiri Tulisan Nama Gereja -->
-<div class="relative z-10 text-white flex items-center space-x-3">
-    <!-- Komponen Gambar Logo GPIB -->
-    <img src="https://gpib.or.id" alt="Logo GPIB" class="w-12 h-12 md:w-16 md:h-16 object-contain drop-shadow-md bg-white/90 p-1 rounded-xl shrink-0">
-
-    <!-- Komponen Teks Keterangan Gereja -->
-    <div>
-        <p class="text-[10px] md:text-xs uppercase tracking-wider font-bold text-amber-300">Sistem Informasi Manajemen Inventaris</p>
-        <h2 class="text-sm md:text-xl font-black tracking-tight mt-0.5">GPIB BETLEHEM SUNGAI AMBAWANG</h2>
-    </div>
-</div>
+                <div class="relative z-10 text-white">
+                    <p class="text-[10px] uppercase tracking-wider font-semibold text-amber-300">Sistem Informasi Manajemen Inventaris</p>
+                    <h2 class="text-sm md:text-xl font-black tracking-tight mt-1">GPIB BETLEHEM SUNGAI AMBAWANG</h2>
                 </div>
-                <!-- Tombol Menyisipkan/Ganti Gambar Banner -->
-                <label class="absolute top-4 right-4 bg-white/90 backdrop-blur text-gray-700 p-2 rounded-full shadow-md cursor-pointer text-xs font-semibold flex items-center space-x-1 z-20 hover:bg-white transition">
-                    <i class="fa-solid fa-camera text-blue-900"></i>
-                    <span class="hidden sm:inline">Ganti Gambar</span>
-                    <input type="file" id="upload-banner-input" class="hidden" accept="image/*">
-                </label>
             </div>
         </div>
 
-        <!-- Ringkasan Angka Status Kondisi Barang -->
+        <!-- Ringkasan Angka Status -->
         <div class="grid grid-cols-3 gap-3">
-            <div class="bg-white p-4 rounded-xl border border-gray-100 text-center shadow-sm flex flex-col justify-center">
-                <p class="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-wider">B - Baik</p>
-                <p class="text-xl md:text-2xl font-black text-green-600 mt-1" id="count-baik">0</p>
+            <div class="bg-white p-3 rounded-xl border text-center shadow-sm">
+                <p class="text-[10px] text-gray-400 font-bold uppercase">B - Baik</p>
+                <p class="text-xl font-black text-green-600 mt-1" id="count-baik">0</p>
             </div>
-            <div class="bg-white p-4 rounded-xl border border-gray-100 text-center shadow-sm flex flex-col justify-center">
-                <p class="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-wider">P - Servis</p>
-                <p class="text-xl md:text-2xl font-black text-amber-500 mt-1" id="count-perbaikan">0</p>
+            <div class="bg-white p-3 rounded-xl border text-center shadow-sm">
+                <p class="text-[10px] text-gray-400 font-bold uppercase">P - Servis</p>
+                <p class="text-xl font-black text-amber-500 mt-1" id="count-perbaikan">0</p>
             </div>
-            <div class="bg-white p-4 rounded-xl border border-gray-100 text-center shadow-sm flex flex-col justify-center">
-                <p class="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-wider">R - Rusak</p>
-                <p class="text-xl md:text-2xl font-black text-red-600 mt-1" id="count-rusak">0</p>
+            <div class="bg-white p-3 rounded-xl border text-center shadow-sm">
+                <p class="text-[10px] text-gray-400 font-bold uppercase">R - Rusak</p>
+                <p class="text-xl font-black text-red-600 mt-1" id="count-rusak">0</p>
             </div>
         </div>
 
-        <!-- Formulir Input Inventaris Dari HP -->
+        <!-- Form Entri Data -->
         <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-            <div class="flex items-center space-x-2 mb-4 border-b pb-3">
-                <i class="fa-solid fa-square-plus text-blue-900 text-lg"></i>
-                <h3 class="font-bold text-gray-800 text-sm md:text-base">Form Entri Inventaris</h3>
-            </div>
-            
+            <h3 class="font-bold text-gray-800 mb-4 border-b pb-2 text-sm flex items-center"><i class="fa-solid fa-square-plus text-blue-900 mr-2"></i>Form Entri Inventaris</h3>
             <form id="asset-form" class="space-y-4 text-xs md:text-sm">
                 <div>
                     <label class="block font-bold text-gray-600 mb-1">Nama Barang / Aset</label>
-                    <input type="text" id="nama_barang" required placeholder="Contoh: Mic Wireless Ashley" class="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent bg-gray-50/50">
+                    <input type="text" id="nama_barang" required placeholder="Contoh: Mic Wireless Ashley" class="w-full p-3 border rounded-xl bg-gray-50/50 focus:outline-none focus:ring-2 focus:ring-blue-900">
                 </div>
                 
+                <!-- FITUR BARU: Kolom Ambil Foto Barang dari HP -->
+                <div>
+                    <label class="block font-bold text-gray-600 mb-1">Foto Fisik Barang (Kamera/Galeri HP)</label>
+                    <input type="file" id="foto_barang" accept="image/*" class="w-full p-2 border rounded-xl bg-gray-50/50 text-xs file:mr-4 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                </div>
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block font-bold text-gray-600 mb-1">Kategori (Bab 1.1)</label>
-                        <select id="kategori" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-900">
+                        <select id="kategori" class="w-full p-3 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-900">
                             <option value="HTB">HTB - Harta Tidak Bergerak</option>
                             <option value="HBG">HBG - Harta Bergerak</option>
                             <option value="HKI">HKI - Harta Tak Berwujud</option>
@@ -93,7 +75,7 @@
                     </div>
                     <div>
                         <label class="block font-bold text-gray-600 mb-1">Lokasi Pos/Pelkes (Bab 1.2)</label>
-                        <select id="lokasi" class="w-full p-3 border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-900">
+                        <select id="lokasi" class="w-full p-3 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-900">
                             <option value="IND">IND - Induk</option>
                             <option value="DAP">DAP - Dango Anugerah Penapat</option>
                             <option value="MIS">MIS - Menara Iman Siak</option>
@@ -104,11 +86,10 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="grid grid-cols-3 gap-2">
                     <div>
-                        <label class="block font-bold text-gray-600 mb-1">Ruangan/Tempat</label>
-                        <select id="tempat" class="w-full p-3 border border-gray-200 rounded-xl bg-white text-xs focus:outline-none focus:ring-2 focus:ring-blue-900">
+                        <label class="block font-bold text-gray-600 mb-1">Ruangan</label>
+                        <select id="tempat" class="w-full p-3 border rounded-xl bg-white text-xs focus:outline-none focus:ring-2 focus:ring-blue-900">
                             <option value="GRJ">GRJ - Gereja</option>
                             <option value="KST">KST - Konsistori</option>
                             <option value="PST">PST - Pastori</option>
@@ -117,39 +98,52 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block font-bold text-gray-600 mb-1">Tahun Perolehan</label>
-                        <input type="number" id="tahun" value="2026" class="w-full p-3 border border-gray-200 rounded-xl text-center focus:outline-none focus:ring-2 focus:ring-blue-900">
+                        <label class="block font-bold text-gray-600 mb-1">Tahun</label>
+                        <input type="number" id="tahun" value="2026" class="w-full p-3 border rounded-xl text-center focus:outline-none focus:ring-2 focus:ring-blue-900">
                     </div>
                     <div>
-                        <label class="block font-bold text-gray-600 mb-1">Kondisi Fisik</label>
-                        <select id="kondisi" class="w-full p-3 border border-gray-200 rounded-xl bg-white text-xs focus:outline-none focus:ring-2 focus:ring-blue-900">
+                        <label class="block font-bold text-gray-600 mb-1">Kondisi</label>
+                        <select id="kondisi" class="w-full p-3 border rounded-xl bg-white text-xs focus:outline-none focus:ring-2 focus:ring-blue-900">
                             <option value="Baik">Baik (B)</option>
                             <option value="Perlu Perbaikan">Servis (P)</option>
                             <option value="Rusak Berat">Rusak (R)</option>
                         </select>
                     </div>
                 </div>
-
-                <button type="submit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3.5 rounded-xl shadow-md transition flex items-center justify-center space-x-2 text-sm mt-2">
-                    <i class="fa-solid fa-floppy-disk text-base"></i>
+                <button type="submit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3.5 rounded-xl transition flex items-center justify-center space-x-2 text-sm">
+                    <i class="fa-solid fa-floppy-disk"></i>
                     <span>Simpan & Beri Kode BSA</span>
                 </button>
             </form>
         </div>
 
-        <!-- Tabel Register Master Realtime dari Database Cloud -->
+        <!-- Master Register Digital -->
         <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-            <div class="flex items-center space-x-2 mb-3">
-                <i class="fa-solid fa-table-list text-blue-900"></i>
-                <h3 class="font-bold text-gray-800 text-sm">Master Register Digital (Supabase)</h3>
-            </div>
-            <div id="asset-list" class="space-y-3 max-h-72 overflow-y-auto pr-1">
-                <p class="text-xs text-gray-400 text-center py-6">Hubungkan ke database online...</p>
+            <h3 class="font-bold text-gray-800 mb-3 text-sm flex items-center"><i class="fa-solid fa-table-list text-blue-900 mr-2"></i>Master Register Digital</h3>
+            <div id="asset-list" class="space-y-3 max-h-96 overflow-y-auto pr-1">
+                <p class="text-xs text-gray-400 text-center py-6">Memuat data dari database cloud...</p>
             </div>
         </div>
     </main>
 
-    <!-- Menyambungkan ke Logika Pengiriman Data -->
-    <script src="/js/main.js"></script>
-</body>
-</html>
+    <!-- AREA POP-UP LABEL STIKER -->
+    <div id="print-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white p-6 rounded-2xl max-w-sm w-full text-center space-y-4 shadow-2xl relative">
+            <h4 class="font-bold text-gray-800 text-sm border-b pb-2">Label Stiker Fisik Resmi</h4>
+            <div id="label-sticker-area" class="border-2 border-dashed border-gray-400 p-4 rounded-xl bg-white mx-auto inline-block text-left w-full shadow-inner">
+                <div class="flex justify-between items-center border-b pb-1.5 mb-2">
+                    <div class="font-black text-[11px] text-blue-900 tracking-wider">PROPERTY OF GPIB</div>
+                    <div class="text-[9px] font-mono text-gray-500 font-bold">BETLEHEM BSA</div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div id="qrcode-box" class="bg-white p-1 border rounded-lg shrink-0 shadow-sm flex items-center justify-center"></div>
+                    <div class="text-[10px] leading-tight space-y-0.5">
+                        <p class="text-gray-400 font-bold uppercase text-[8px] tracking-tight">Kode Aset Resmi:</p>
+                        <p class="font-mono font-black text-blue-700 text-xs tracking-tight" id="modal-kode-bsa">-</p>
+                        <p class="font-black text-gray-800 text-[11px] truncate mt-1" id="modal-nama-barang">-</p>
+                        <p class="text-gray-400 text-[8px]" id="modal-detail-aset">-</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex space-x-2 text-xs font-bold pt-2">
+                <button onclick="closePrintModal()" class="w-1/2 border py-2.5 rounded-xl text-gray-500">Tutup</button>
