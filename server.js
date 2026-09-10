@@ -56,9 +56,9 @@ app.post('/api/assets', async (req, res) => {
         const kodeBSA = `BSA-${kategori}-${lokasi}-${tempat}-${tahun}-${nomorUrut}`;
         
         const { data: insertedData, error: insertError } = await supabase
-            .from('assets')
-            .insert([{ kodeBSA, nama, kategori, lokasi, tempat, tahun, kondisi }])
-            .select();
+    .from('assets')
+    .insert([{ kodeBSA, nama, kategori, lokasi, tempat, tahun, kondisi, foto }])
+    .select();
 
         if (insertError) return res.status(400).json({ error: insertError.message });
         
