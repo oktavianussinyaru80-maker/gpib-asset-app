@@ -13,6 +13,13 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 // KUNCI PERBAIKAN: Mengatur batas penerimaan data teks foto kamera HP hingga 50MB
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+// KODE IZIN SAPU JAGAT: Membuka kunci gerbang Vercel agar data HP lolos masuk
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 
