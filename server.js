@@ -6,8 +6,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // KONEKSI SUPABASE ONLINE (MENGGUNAKAN SECRET SERVICE ROLE KEY)
-const SUPABASE_URL = 'https://supabase.co';
-const SUPABASE_KEY = 'sb_secret_Fx6bxyDUmpROiqkH1G38Ag_K5XlgreQ';
+const SUPABASE_URL = 'https://xsutkuazoprovxbrjgcw.supabase.co';
+const SUPABASE_KEY = 'sb_secret_kvjikjyNTDUXUfpfo0d9fA_sG-oOyjo';
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // KUNCI PERBAIKAN: Mengatur batas penerimaan data teks foto kamera HP hingga 50MB
