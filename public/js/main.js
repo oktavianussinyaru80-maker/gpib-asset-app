@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const fileInput = document.getElementById('foto_barang');
             let fotoBase64 = "";
 
-            if (fileInput && fileInput.files.length > 0) {
+            // PERBAIKAN: Mengunci pembacaan file kamera urutan pertama [0] agar HP tidak freeze
+            if (fileInput && fileInput.files && fileInput.files.length > 0) {
                 const file = fileInput.files[0];
                 fotoBase64 = await convertFileToBase64(file);
             }
@@ -38,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if(document.getElementById('tahun')) document.getElementById('tahun').value = "2026";
                     loadAssets();
                 } else {
-                    alert('⚠️ Gagal Menyimpan: ' + (result.error || 'Terjadi kesalahan.'));
+                    alert('⚠️ Gagal Menyimpan: ' + (result.error || 'Terjadi kesalahan database.'));
                 }
             } catch (err) {
                 alert('❌ Jaringan gagal mengirim data.');
