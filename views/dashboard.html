@@ -1,150 +1,140 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dasbor Aset - GPIB Betlehem Sungai Ambawang</title>
-    <!-- Alamat Desain Lengkap & Stabil (Dijamin Langsung Muncul di HP) -->
-    <script src="https://unpkg.com"></script>
-    <link rel="stylesheet" href="https://cloudflare.com">
-    <script src="https://cloudflare.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dasbor Aset - GPIB Betlehem Sungai Ambawang</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FontAwesome Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-gray-50 font-sans min-h-screen text-gray-800">
 
-    <nav class="bg-blue-900 text-white p-4 sticky top-0 z-50 shadow-md">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <i class="fa-solid fa-church text-xl text-amber-400"></i>
-                <h1 class="text-sm md:text-lg font-bold tracking-wide">Aset GPIB Betlehem BSA</h1>
-            </div>
-            <span class="text-[10px] bg-blue-800 px-2 rounded-full font-mono text-blue-200">v1.2</span>
+  <!-- Navbar Navigation -->
+  <nav class="bg-blue-900 text-white p-4 sticky top-0 z-50 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <i class="fa-solid fa-church text-xl text-amber-400"></i>
+        <h1 class="text-sm md:text-lg font-bold tracking-wide">
+          Aset GPIB Betlehem BSA
+        </h1>
+      </div>
+      <span class="text-[10px] bg-blue-800 px-2 py-1 rounded-full font-mono text-blue-200">
+        v1.3
+      </span>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="container mx-auto p-4 md:p-6 max-w-5xl space-y-6">
+
+    <!-- Header Banner / Title Section -->
+    <header class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div>
+        <h2 class="text-xl md:text-2xl font-extrabold text-blue-950">
+          GPIB BETLEHEM SUNGAI AMBAWANG
+        </h2>
+        <p class="text-sm text-gray-500 mt-1 flex items-center gap-2">
+          <i class="fa-solid fa-location-dot text-red-500"></i>
+          S-BSA / P-Serv / B-BSA
+        </p>
+      </div>
+      <div class="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
+        <i class="fa-solid fa-layer-group text-blue-600"></i>
+        <span>Master Register Digital</span>
+      </div>
+    </header>
+
+    <!-- Quick Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
+        <div class="p-3 bg-blue-50 text-blue-600 rounded-lg">
+          <i class="fa-solid fa-boxes-stacked text-xl"></i>
         </div>
-    </nav>
+        <div>
+          <p class="text-xs text-gray-500 uppercase font-semibold">Total Inventaris</p>
+          <p class="text-2xl font-bold text-gray-800 mt-0.5">--</p>
+        </div>
+      </div>
 
-    <main class="container mx-auto p-4 space-y-6 max-w-4xl">
-        
-        <!-- Banner Dasbor -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div id="dashboard-banner" class="w-full h-44 bg-gradient-to-r from-blue-700 to-indigo-900 bg-cover bg-center flex items-end p-6 relative">
-                <div class="absolute inset-0 bg-black bg-opacity-40"></div>
-                <div class="relative z-10 text-white">
-                    <p class="text-[10px] uppercase tracking-wider font-semibold text-amber-300">Sistem Informasi Manajemen Inventaris</p>
-                    <h2 class="text-sm md:text-xl font-black tracking-tight mt-1">GPIB BETLEHEM SUNGAI AMBAWANG</h2>
-                </div>
-            </div>
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
+        <div class="p-3 bg-emerald-50 text-emerald-600 rounded-lg">
+          <i class="fa-solid fa-circle-check text-xl"></i>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase font-semibold">Kondisi Baik</p>
+          <p class="text-2xl font-bold text-gray-800 mt-0.5">--</p>
+        </div>
+      </div>
+
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
+        <div class="p-3 bg-amber-50 text-amber-600 rounded-lg">
+          <i class="fa-solid fa-wrench text-xl"></i>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase font-semibold">Perlu Perbaikan</p>
+          <p class="text-2xl font-bold text-gray-800 mt-0.5">--</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Entri Inventaris Card -->
+    <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <div class="flex items-center space-x-2 border-b border-gray-100 pb-4 mb-6">
+        <i class="fa-solid fa-pen-to-square text-blue-900"></i>
+        <h3 class="font-bold text-lg text-gray-800">Form Entri Inventaris</h3>
+      </div>
+
+      <form id="inventoryForm" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Barang / Aset</label>
+            <input type="text" placeholder="Masukkan nama barang..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-sm">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Kode Barang</label>
+            <input type="text" placeholder="Contoh: INV-BSA-001" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-sm">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Kategori / Ruangan</label>
+            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-sm text-gray-700">
+              <option value="">-- Pilih Ruangan --</option>
+              <option value="S-BSA">S-BSA (Sungai Ambawang)</option>
+              <option value="P-Serv">P-Serv (Pastori/Servant)</option>
+              <option value="B-BSA">B-BSA (Bait/Gedung)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Kondisi Barang</label>
+            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-sm text-gray-700">
+              <option value="Baik">Baik</option>
+              <option value="Rusak Ringan">Rusak Ringan</option>
+              <option value="Rusak Berat">Rusak Berat</option>
+            </select>
+          </div>
         </div>
 
-        <!-- Ringkasan Angka Status -->
-        <div class="grid grid-cols-3 gap-3">
-            <div class="bg-white p-3 rounded-xl border text-center shadow-sm">
-                <p class="text-[10px] text-gray-400 font-bold uppercase">B - Baik</p>
-                <p class="text-xl font-black text-green-600 mt-1" id="count-baik">0</p>
-            </div>
-            <div class="bg-white p-3 rounded-xl border text-center shadow-sm">
-                <p class="text-[10px] text-gray-400 font-bold uppercase">P - Servis</p>
-                <p class="text-xl font-black text-amber-500 mt-1" id="count-perbaikan">0</p>
-            </div>
-            <div class="bg-white p-3 rounded-xl border text-center shadow-sm">
-                <p class="text-[10px] text-gray-400 font-bold uppercase">R - Rusak</p>
-                <p class="text-xl font-black text-red-600 mt-1" id="count-rusak">0</p>
-            </div>
+        <div class="pt-2 flex justify-end">
+          <button type="submit" class="bg-blue-900 hover:bg-blue-800 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition flex items-center gap-2 shadow-sm">
+            <i class="fa-solid fa-plus"></i>
+            Simpan Data
+          </button>
         </div>
+      </form>
+    </section>
 
-        <!-- Form Entri Data -->
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-            <h3 class="font-bold text-gray-800 mb-4 border-b pb-2 text-sm flex items-center"><i class="fa-solid fa-square-plus text-blue-900 mr-2"></i>Form Entri Inventaris</h3>
-            <form id="asset-form" class="space-y-4 text-xs md:text-sm">
-                <div>
-                    <label class="block font-bold text-gray-600 mb-1">Nama Barang / Aset</label>
-                    <input type="text" id="nama_barang" required placeholder="Contoh: Mic Wireless Ashley" class="w-full p-3 border rounded-xl bg-gray-50/50 focus:outline-none focus:ring-2 focus:ring-blue-900">
-                </div>
-                
-                <!-- Kolom Ambil Foto Barang -->
-                <div>
-                    <label class="block font-bold text-gray-600 mb-1">Foto Fisik Barang (Kamera/Galeri HP)</label>
-                    <input type="file" id="foto_barang" accept="image/*" class="w-full p-2 border rounded-xl bg-gray-50/50 text-xs file:mr-4 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                </div>
+  </main>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block font-bold text-gray-600 mb-1">Kategori (Bab 1.1)</label>
-                        <select id="kategori" class="w-full p-3 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-900">
-                            <option value="HTB">HTB - Harta Tidak Bergerak</option>
-                            <option value="HBG">HBG - Harta Bergerak</option>
-                            <option value="HKI">HKI - Harta Tak Berwujud</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block font-bold text-gray-600 mb-1">Lokasi Pos/Pelkes (Bab 1.2)</label>
-                        <select id="lokasi" class="w-full p-3 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-900">
-                            <option value="IND">IND - Induk</option>
-                            <option value="DAP">DAP - Dango Anugerah Penapat</option>
-                            <option value="MIS">MIS - Menara Iman Siak</option>
-                            <option value="PND">PND - Penabur Durian</option>
-                            <option value="TJP">TJP - Tuah Jubata Sei. Pelaik</option>
-                            <option value="SHB">SHB - Sahabat Berinang</option>
-                            <option value="IMB">IMB - Imanuel Bengkarek</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
-                        <label class="block font-bold text-gray-600 mb-1">Ruangan</label>
-                        <select id="tempat" class="w-full p-3 border rounded-xl bg-white text-xs focus:outline-none focus:ring-2 focus:ring-blue-900">
-                            <option value="GRJ">GRJ - Gereja</option>
-                            <option value="KST">KST - Konsistori</option>
-                            <option value="PST">PST - Pastori</option>
-                            <option value="GDL">GDL - Gedung Lain</option>
-                            <option value="KNT">KNT - Kantor</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block font-bold text-gray-600 mb-1">Tahun</label>
-                        <input type="number" id="tahun" value="2026" class="w-full p-3 border rounded-xl text-center focus:outline-none focus:ring-2 focus:ring-blue-900">
-                    </div>
-                    <div>
-                        <label class="block font-bold text-gray-600 mb-1">Kondisi</label>
-                        <select id="kondisi" class="w-full p-3 border rounded-xl bg-white text-xs focus:outline-none focus:ring-2 focus:ring-blue-900">
-                            <option value="Baik">Baik (B)</option>
-                            <option value="Perlu Perbaikan">Servis (P)</option>
-                            <option value="Rusak Berat">Rusak (R)</option>
-                        </select>
-                    </div>
-                </div>
-                <button type="submit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3.5 rounded-xl transition flex items-center justify-center space-x-2 text-sm">
-                    <i class="fa-solid fa-floppy-disk"></i>
-                    <span>Simpan & Beri Kode BSA</span>
-                </button>
-            </form>
-        </div>
+  <!-- Footer -->
+  <footer class="text-center py-6 text-xs text-gray-400">
+    &copy; GPIB Betlehem Sungai Ambawang - System Inventaris Aset
+  </footer>
 
-        <!-- Master Register Digital -->
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-            <h3 class="font-bold text-gray-800 mb-3 text-sm flex items-center"><i class="fa-solid fa-table-list text-blue-900 mr-2"></i>Master Register Digital</h3>
-            <div id="asset-list" class="space-y-3 max-h-96 overflow-y-auto pr-1">
-                <p class="text-xs text-gray-400 text-center py-6">Memuat data dari database cloud...</p>
-            </div>
-        </div>
-    </main>
-
-    <!-- AREA POP-UP LABEL STIKER -->
-    <div id="print-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white p-6 rounded-2xl max-w-sm w-full text-center space-y-4 shadow-2xl relative">
-            <h4 class="font-bold text-gray-800 text-sm border-b pb-2">Label Stiker Fisik Resmi</h4>
-            <div id="label-sticker-area" class="border-2 border-dashed border-gray-400 p-4 rounded-xl bg-white mx-auto inline-block text-left w-full shadow-inner">
-                <div class="flex justify-between items-center border-b pb-1.5 mb-2">
-                    <div class="font-black text-[11px] text-blue-900 tracking-wider">PROPERTY OF GPIB</div>
-                    <div class="text-[9px] font-mono text-gray-500 font-bold">BETLEHEM BSA</div>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <div id="qrcode-box" class="bg-white p-1 border rounded-lg shrink-0 shadow-sm flex items-center justify-center"></div>
-                    <div class="text-[10px] leading-tight space-y-0.5">
-                        <p class="text-gray-400 font-bold uppercase text-[8px] tracking-tight">Kode Aset Resmi:</p>
-                        <p class="font-mono font-black text-blue-700 text-xs tracking-tight" id="modal-kode-bsa">-</p>
-                        <p class="font-black text-gray-800 text-[11px] truncate mt-1" id="modal-nama-barang">-</p>
-                        <p class="text-gray-400 text-[8px]" id="modal-detail-aset">-</p>
-                    </div>
-                </div>
-            </div>
-            <div class="flex space-x-2 text-xs font-bold pt-2">
-                <button onclick="closePrintModal()" class="w-1/2 border py-2.5 rounded-xl text-gray-500">Tutup</button>
+</body>
+</html>
