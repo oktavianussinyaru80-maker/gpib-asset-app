@@ -6,23 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const fileInput = document.getElementById('foto_barang');
-            let fotoBase64 = "";
-
-            // PERBAIKAN: Mengunci pembacaan file kamera urutan pertama [0] agar HP tidak freeze
-            if (fileInput && fileInput.files && fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                fotoBase64 = await convertFileToBase64(file);
-            }
-
             const payload = {
                 nama: document.getElementById('nama_barang').value,
                 kategori: document.getElementById('kategori').value,
                 lokasi: document.getElementById('lokasi').value,
                 tempat: document.getElementById('tempat').value,
                 tahun: parseInt(document.getElementById('tahun').value) || 2026,
-                kondisi: document.getElementById('kondisi').value,
-                foto: fotoBase64
+                kondisi: document.getElementById('kondisi').value
             };
 
             try {
@@ -31,31 +21,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
+
                 const result = await response.json();
 
                 if (response.ok) {
-                    alert('🎉 Data Aset Berhasil Disimpan Online!');
+                    // KALIMAT NOTIFIKASI BERHASIL DISIMPAN SENSASIONAL
+                    alert('🎉 Data Aset Berhasil Disimpan ke Supabase Online!');
                     form.reset();
                     if(document.getElementById('tahun')) document.getElementById('tahun').value = "2026";
                     loadAssets();
                 } else {
-                    alert('⚠️ Gagal Menyimpan: ' + (result.error || 'Terjadi kesalahan database.'));
+                    alert('⚠️ Gagal Menyimpan: ' + (result.error || 'Terjadi kesalahan sistem.'));
                 }
             } catch (err) {
-                alert('❌ Jaringan gagal mengirim data.');
+                alert('❌ Gagal terhubung ke server cloud.');
             }
         });
     }
 });
-
-function convertFileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
-}
 
 async function loadAssets() {
     const container = document.getElementById('asset-list');
@@ -65,6 +48,7 @@ async function loadAssets() {
         const response = await fetch('/api/assets');
         const assets = await response.json();
         container.innerHTML = '';
+
         let baik = 0, perbaikan = 0, rusak = 0;
 
         if (!assets || assets.length === 0) {
@@ -78,26 +62,15 @@ async function loadAssets() {
             if (asset.kondisi === 'Rusak Berat') rusak++;
 
             const card = document.createElement('div');
-            card.className = "p-3 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between text-xs shadow-sm mb-2";
-            
-            const imageTag = asset.foto 
-                ? `<img src="${asset.foto}" class="w-14 h-14 object-cover rounded-lg border bg-white shrink-0 shadow-sm" onclick="window.open('${asset.foto}')" style="cursor:pointer;">`
-                : `<div class="w-14 h-14 bg-gray-200 border rounded-lg flex items-center justify-center text-gray-400 shrink-0"><i class="fa-solid fa-image text-lg"></i></div>`;
-
+            card.className = "p-3 bg-gray-50 rounded-xl border border-gray-200 flex justify-between items-center text-xs shadow-sm mb-2";
             card.innerHTML = `
-                <div class="flex items-start space-x-3 w-full">
-                    ${imageTag}
-                    <div class="flex-1 min-w-0" style="text-align: left;">
-                        <p class="font-mono text-blue-700 font-black text-[12px]">${asset.kodeBSA || 'BSA'}</p>
-                        <p class="font-black text-gray-800 text-sm truncate mt-0.5">${asset.nama || '-'}</p>
-                        <p class="text-gray-400 text-[10px] mt-0.5 font-bold uppercase tracking-tight">${asset.lokasi || ''} • ${asset.tempat || ''} • Thn ${asset.tahun || ''} • [${asset.kondisi || ''}]</p>
-                    </div>
+                <div style="text-align: left;">
+                    <p class="font-mono text-blue-700 font-black text-[12px]">${asset.kodeBSA || 'BSA'}</p>
+                    <p class="font-black text-gray-800 text-sm mt-0.5">${asset.nama || '-'}</p>
+                    <p class="text-gray-400 text-[10px] mt-0.5 font-bold uppercase tracking-tight">${asset.lokasi || ''} • ${asset.tempat || ''} • Thn ${asset.tahun || ''} • [${asset.kondisi || ''}]</p>
                 </div>
-                <div class="flex items-center space-x-2 border-t pt-2 mt-2 justify-end w-full">
-                    <button onclick="openPrintModal('${asset.kodeBSA}', '${asset.nama}', '${asset.lokasi}', '${asset.tempat}', '${asset.tahun}')" class="bg-blue-900 text-white px-2.5 py-1.5 rounded-lg font-bold flex items-center space-x-1 text-[11px]">
-                        <i class="fa-solid fa-qrcode text-xs"></i> <span>Label</span>
-                    </button>
-                    <button onclick="deleteAssetSecurely(${asset.id}, '${asset.nama}')" class="bg-red-50 text-red-600 border border-red-200 p-1.5 rounded-lg">
+                <div class="flex items-center space-x-2">
+                    <button onclick="deleteAssetSecurely(${asset.id}, '${asset.nama}')" class="bg-red-50 text-red-600 border border-red-200 p-1.5 rounded-lg active:scale-95">
                         <i class="fa-solid fa-trash-can text-xs"></i>
                     </button>
                 </div>
@@ -114,52 +87,27 @@ async function loadAssets() {
     }
 }
 
+// 🔐 FUNGSI RAHASIA: TOMBOL TONG SAMPAH DENGAN PEMBATASAN PIN 1234
 async function deleteAssetSecurely(id, namaBarang) {
-    const pin = prompt(`⚠️ Masukkan PIN Keamanan Pengurus Gereja untuk menghapus "${namaBarang}":`);
+    const pin = prompt(`⚠️ Masukkan PIN Keamanan Admin untuk menghapus "${namaBarang}":`);
     if (pin === null) return;
+    
+    // PEMBATASAN PIN KEAMANAN KETAT
     if (pin !== '1234') {
-        alert('❌ PIN Salah!');
+        alert('❌ PIN Keamanan Salah! Anda tidak diizinkan menghapus data ini.');
         return;
     }
-    const setuju = confirm(`Hapus permanen "${namaBarang}"?`);
+
+    const setuju = confirm(`Apakah Anda yakin ingin menghapus permanen data "${namaBarang}"?`);
     if (!setuju) return;
 
     try {
         const response = await fetch(`/api/assets/${id}`, { method: 'DELETE' });
         if (response.ok) {
-            alert('🗑️ Data terhapus.');
+            alert('🗑️ Data aset berhasil terhapus secara permanen.');
             loadAssets();
         }
     } catch (err) {
-        alert('❌ Gagal merespon.');
+        alert('❌ Gagal merespon jaringan.');
     }
-}
-
-let qrInstance = null;
-function openPrintModal(kodeBSA, nama, lokasi, tempat, tahun) {
-    document.getElementById('modal-kode-bsa').innerText = kodeBSA;
-    document.getElementById('modal-nama-barang').innerText = nama;
-    document.getElementById('modal-detail-aset').innerText = `${lokasi} / ${tempat} / TAHUN ${tahun}`;
-    const qrBox = document.getElementById('qrcode-box');
-    qrBox.innerHTML = '';
-    qrInstance = new QRCode(qrBox, {
-        text: kodeBSA,
-        width: 60,
-        height: 60,
-        colorDark: "#1e3a8a",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-    });
-    document.getElementById('print-modal').classList.remove('hidden');
-}
-
-function closePrintModal() {
-    document.getElementById('print-modal').classList.add('hidden');
-}
-
-function executePrintLabel() {
-    const printContents = document.getElementById('label-sticker-area').innerHTML;
-    document.body.innerHTML = `<div style="padding:20px; display:flex; justify-content:center; align-items:center; height:100vh;"><div style="border:2px solid #000; padding:15px; width:280px; border-radius:10px; font-family:monospace;">${printContents}</div></div>`;
-    window.print();
-    window.location.reload();
 }
