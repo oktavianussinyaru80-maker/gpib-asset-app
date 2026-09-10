@@ -1,112 +1,80 @@
 const express = require('express');
 const path = require('path');
+const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// KONEKSI SUPABASE ONLINE (MENGGUNAKAN FORMAT KUNCI BARU ANDA)
+// KONEKSI SUPABASE ONLINE (MENGGUNAKAN PUBLISHABLE KEY YANG SUDAH TERBUKTI AMAN)
 const SUPABASE_URL = 'https://supabase.co';
-const SUPABASE_KEY = 'sb_secret_kvjikjyNTDUXUfpfo0d9fA_sG-oOyjo';
+const SUPABASE_KEY = 'sb_publishable_dJVJ9iiDsSr6nTqMWua0FA_Dj21KC6o';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'dashboard.html'));
 });
 
-// API: Ambil data dari Supabase via Fetch Rest API
+// API: Ambil data dari Supabase
 app.get('/api/assets', async (req, res) => {
     try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/assets?select=*&order=id.desc`, {
-            method: 'GET',
-            headers: {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        
-        if (!response.ok) {
-            const errText = await response.text();
-            return res.status(response.status).json({ error: errText });
-        }
-        
-        const data = await response.json();
+        const { data, error } = await supabase
+            .from('assets')
+            .select('*')
+            .order('id', { ascending: false });
+
+        if (error) return res.status(400).json({ error: error.message });
         res.json(data || []);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-// API: Simpan data ke Supabase (Mendukung Format Kunci Baru)
+// API: Simpan data ke Supabase (Kode BSA Menyesuaikan Pilihan Lokasi & Tempat)
 app.post('/api/assets', async (req, res) => {
     try {
-        const { kategori, lokasi, tempat, tahun, nama, kondisi, foto } = req.body;
+        const { kategori, lokasi, tempat, tahun, nama, kondisi } = req.body;
 
-        // Ambil data untuk menghitung nomor urut otomatis
-        const countResponse = await fetch(`${SUPABASE_URL}/rest/v1/assets?select=id`, {
-            method: 'GET',
-            headers: {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`
-            }
-        });
-        
-        let count = 1;
-        if (countResponse.ok) {
-            const existingAssets = await countResponse.json();
-            count = (existingAssets ? existingAssets.length : 0) + 1;
-        }
-        
+        // Hitung jumlah aset dengan kategori yang sama untuk nomor urut
+        const { data: existingAssets, error: countError } = await supabase
+            .from('assets')
+            .select('id')
+            .eq('kategori', kategori);
+
+        if (countError) return res.status(400).json({ error: countError.message });
+
+        const count = (existingAssets ? existingAssets.length : 0) + 1;
         const nomorUrut = String(count).padStart(3, '0');
+        
+        // KODE BSA OTOMATIS MENYESUAIKAN LOKASI DAN TEMPAT YANG DIPILIH
         const kodeBSA = `BSA-${kategori}-${lokasi}-${tempat}-${tahun}-${nomorUrut}`;
         
-        const rowData = { kodeBSA, nama, kategori, lokasi, tempat, tahun, kondisi, foto };
+        const { data: insertedData, error: insertError } = await supabase
+            .from('assets')
+            .insert([{ kodeBSA, nama, kategori, lokasi, tempat, tahun, kondisi }])
+            .select();
 
-        const insertResponse = await fetch(`${SUPABASE_URL}/rest/v1/assets`, {
-            method: 'POST',
-            headers: {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'return=representation'
-            },
-            body: JSON.stringify(rowData)
-        });
-
-        if (!insertResponse.ok) {
-            const errText = await insertResponse.text();
-            return res.status(insertResponse.status).json({ error: errText });
-        }
+        if (insertError) return res.status(400).json({ error: insertError.message });
         
-        const insertedData = await insertResponse.json();
         res.status(201).json({ success: true, data: insertedData });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-// API: Menghapus baris data aset di Supabase berdasarkan ID
+// API: Menghapus baris data aset berdasarkan ID
 app.delete('/api/assets/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/assets?id=eq.${id}`, {
-            method: 'DELETE',
-            headers: {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`,
-                'Prefer': 'return=representation'
-            }
-        });
+        const { data, error } = await supabase
+            .from('assets')
+            .delete()
+            .eq('id', id)
+            .select();
 
-        if (!response.ok) {
-            const errText = await response.text();
-            return res.status(response.status).json({ error: errText });
-        }
-        
-        const data = await response.json();
+        if (error) return res.status(400).json({ error: error.message });
         res.json({ success: true, message: 'Data terhapus.', data });
     } catch (err) {
         res.status(500).json({ error: err.message });
