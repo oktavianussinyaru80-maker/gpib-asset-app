@@ -6,8 +6,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // KONEKSI SUPABASE ONLINE (MENGGUNAKAN SECRET SERVICE ROLE KEY)
-const SUPABASE_URL = 'https://supabase.co';
-const SUPABASE_KEY = 'sb_secret_qEqJlHticXfjvfL7HdCLZQ_44PTMXyS...[MASUKKAN_KUNCI_SECRET_ASLI_ANDA]';
+const SUPABASE_URL = 'https://xsutkuazoprovxbrjgcw.supabase.co';
+const SUPABASE_KEY = 'sb_secret_Fx6bxyDUmpROiqkH1G38Ag_K5XlgreQ';
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 app.use(express.json());
