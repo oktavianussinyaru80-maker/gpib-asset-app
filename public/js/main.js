@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const fileInput = document.getElementById('foto_barang');
             let fotoBase64 = "";
 
-            // Mengonversi gambar dari kamera HP menjadi teks aman
             if (fileInput && fileInput.files.length > 0) {
                 const file = fileInput.files[0];
                 fotoBase64 = await convertFileToBase64(file);
@@ -22,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 tempat: document.getElementById('tempat').value,
                 tahun: parseInt(document.getElementById('tahun').value) || 2026,
                 kondisi: document.getElementById('kondisi').value,
-                foto: fotoBase64 // Menyisipkan data gambar
+                foto: fotoBase64
             };
 
             try {
@@ -34,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
 
                 if (response.ok) {
-                    alert('🎉 Data Aset & Foto Berhasil Disimpan Online!');
+                    alert('🎉 Data Aset Berhasil Disimpan Online!');
                     form.reset();
                     if(document.getElementById('tahun')) document.getElementById('tahun').value = "2026";
                     loadAssets();
@@ -42,13 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('⚠️ Gagal Menyimpan: ' + (result.error || 'Terjadi kesalahan.'));
                 }
             } catch (err) {
-                alert('❌ Gagal terhubung ke server cloud.');
+                alert('❌ Jaringan gagal mengirim data.');
             }
         });
     }
 });
 
-// Fungsi pengubah file gambar menjadi kode string teks
 function convertFileToBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -58,7 +56,6 @@ function convertFileToBase64(file) {
     });
 }
 
-// LOAD DATA & TAMPILKAN FOTO BARANG DI LAYAR HP
 async function loadAssets() {
     const container = document.getElementById('asset-list');
     if (!container) return;
@@ -80,23 +77,22 @@ async function loadAssets() {
             if (asset.kondisi === 'Rusak Berat') rusak++;
 
             const card = document.createElement('div');
-            card.className = "p-3 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between text-xs shadow-sm mb-2 animate-fade-in";
+            card.className = "p-3 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between text-xs shadow-sm mb-2";
             
-            // Cek apakah aset memiliki foto, jika tidak beri gambar ikon default
             const imageTag = asset.foto 
-                ? `<img src="${asset.foto}" class="w-14 h-14 object-cover rounded-lg border bg-white shrink-0 shadow-sm cursor-pointer" onclick="viewLargeImage('${asset.foto}', '${asset.nama}')" title="Klik untuk perbesar">`
+                ? `<img src="${asset.foto}" class="w-14 h-14 object-cover rounded-lg border bg-white shrink-0 shadow-sm" onclick="window.open('${asset.foto}')" style="cursor:pointer;">`
                 : `<div class="w-14 h-14 bg-gray-200 border rounded-lg flex items-center justify-center text-gray-400 shrink-0"><i class="fa-solid fa-image text-lg"></i></div>`;
 
             card.innerHTML = `
-                <div class="flex items-start space-x-3">
+                <div class="flex items-start space-x-3 w-full">
                     ${imageTag}
-                    <div class="flex-1 min-w-0">
-                        <p class="font-mono text-blue-700 font-black text-[12px]">${asset.kodeBSA}</p>
-                        <p class="font-black text-gray-800 text-sm truncate mt-0.5">${asset.nama}</p>
-                        <p class="text-gray-400 text-[10px] mt-0.5 font-bold uppercase tracking-tight">${asset.lokasi} • ${asset.tempat} • Thn ${asset.tahun} • [${asset.kondisi}]</p>
+                    <div class="flex-1 min-w-0" style="text-align: left;">
+                        <p class="font-mono text-blue-700 font-black text-[12px]">${asset.kodeBSA || 'BSA'}</p>
+                        <p class="font-black text-gray-800 text-sm truncate mt-0.5">${asset.nama || '-'}</p>
+                        <p class="text-gray-400 text-[10px] mt-0.5 font-bold uppercase tracking-tight">${asset.lokasi || ''} • ${asset.tempat || ''} • Thn ${asset.tahun || ''} • [${asset.kondisi || ''}]</p>
                     </div>
                 </div>
-                <div class="flex items-center space-x-2 border-t pt-2 mt-2 justify-end">
+                <div class="flex items-center space-x-2 border-t pt-2 mt-2 justify-end w-full">
                     <button onclick="openPrintModal('${asset.kodeBSA}', '${asset.nama}', '${asset.lokasi}', '${asset.tempat}', '${asset.tahun}')" class="bg-blue-900 text-white px-2.5 py-1.5 rounded-lg font-bold flex items-center space-x-1 text-[11px]">
                         <i class="fa-solid fa-qrcode text-xs"></i> <span>Label</span>
                     </button>
@@ -113,14 +109,8 @@ async function loadAssets() {
         if(document.getElementById('count-rusak')) document.getElementById('count-rusak').innerText = rusak;
 
     } catch (err) {
-        container.innerHTML = '<p class="text-xs text-red-400 text-center py-6">❌ Gagal memuat data.</p>';
+        container.innerHTML = '<p class="text-xs text-red-400 text-center py-6">❌ Gagal memuat data dari internet.</p>';
     }
-}
-
-// Fungsi Klik Gambar untuk Melihat Ukuran Besar (Pop-up cepat)
-window.viewLargeImage = function(base64Data, nama) {
-    const w = window.open();
-    w.document.write(`<title>Foto Aset: ${nama}</title><body style="margin:0; background:#000; display:flex; justify-content:center; align-items:center; height:100vh;"><img src="${base64Data}" style="max-width:100%; max-height:100%; border-radius:8px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);"></body>`);
 }
 
 async function deleteAssetSecurely(id, namaBarang) {
